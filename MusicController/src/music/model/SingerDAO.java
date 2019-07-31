@@ -63,6 +63,8 @@ public class SingerDAO {
 	}
 	
 	public void addSingersFromFile(String f) throws NumberFormatException, SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
 		try{
 			//파일 객체 생성
 			File file = new File(f);
@@ -71,10 +73,20 @@ public class SingerDAO {
 			//입력 버퍼 생성
 			BufferedReader bufReader = new BufferedReader(filereader);
 			String line = "";
+			
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("insert into singer values(?, ?)");
 			while((line = bufReader.readLine()) != null){
 				String[] e = line.split("\t");
 	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
-				addSinger(new SingerDTO(Integer.parseInt(e[0]),e[1]));
+				pstmt.setInt(1, Integer.parseInt(e[0]));
+				pstmt.setString(2, e[1]);
+				try {
+					int result = pstmt.executeUpdate();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			
 			}
 	  //.readLine()은 끝에 개행문자를 읽지 않는다.            
 			bufReader.close();

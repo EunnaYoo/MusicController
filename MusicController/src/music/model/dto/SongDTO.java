@@ -10,7 +10,6 @@ public class SongDTO {
 	private String name;
 	private String singer;
 	private String date;
-	private String lyrics;
 	
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

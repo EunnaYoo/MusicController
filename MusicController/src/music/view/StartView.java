@@ -8,6 +8,13 @@ public class StartView {
 	public static void main(String[] args) {
 //		controller.getSongList("°¡Áö ¸¶");
 
-		controller.getSingerList("À±");
+//		controller.getSingerList("À±");
+		try {
+			controller.addSingersFromFile("C:\\0.encore\\01.java\\step11_jsoupTest\\singerList.txt");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

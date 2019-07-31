@@ -46,25 +46,4 @@ public class EndView {
 	public static void message(String m) {
 		System.out.println(m);
 	}
-
-//	public static void main(String[] args) {
-//		Document doc = null;
-//		String song="친구라도될걸그랬어";
-//		String singer="거미";
-//		String address="https://www.youtube.com/results?search_query=";
-//		try {
-//			doc = Jsoup.connect(address+song+"+"+singer).get();
-////			Runtime.getRuntime().exec(new String[]{"cmd", "/c","start chrome https://www.youtube.com/watch?v=DDByv3z_z_U"});
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		Elements newsHeadlines = doc.select("h3 > a");
-//		String finalAddress = doc.select("h3 > a").get(0).attr("href");
-//		System.out.println(finalAddress);
-//		//		for (Element e: newsHeadlines) {
-////			System.out.println(e);
-////		}
-//		watchMovie("사랑에 연습이 있었다면", "임재현");
-//	}
 }

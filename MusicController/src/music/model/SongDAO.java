@@ -10,13 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import music.model.dto.SongDTO;
 import music.model.dto.singSongDTO;
 import music.model.util.DBUtil;
 
 public class SongDAO {
-	
 	private static SongDAO instance= new SongDAO();
 	private SongDAO() {};
 	public static SongDAO getInstance() {
@@ -29,12 +29,11 @@ public class SongDAO {
 		PreparedStatement pstmt = null;
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("insert into song values(?, ?, ?, ?, ?)");
+			pstmt = con.prepareStatement("insert into song values(?, ?, ?, ?)");
 			pstmt.setInt(1, song.getId());
 			pstmt.setString(2, song.getName());
 			pstmt.setString(3, song.getSinger());
 			pstmt.setString(4, song.getDate());
-			pstmt.setString(5, song.getLyrics());
 			
 			int result = pstmt.executeUpdate();
 		
@@ -47,10 +46,6 @@ public class SongDAO {
 		return false;
 	}
 	
-<<<<<<< Updated upstream
-	//노래 검색(비슷한 곡들 나오게)
-	public ArrayList<SongDTO> getSongs(String name) throws SQLException{
-=======
 	public void addSongsFromFile(String f) throws NumberFormatException, SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -91,7 +86,6 @@ public class SongDAO {
 
 	// 제목으로 노래 검색
 	public ArrayList<singSongDTO> getSongs(String title) throws SQLException{
->>>>>>> Stashed changes
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -109,11 +103,7 @@ public class SongDAO {
 			
 			list = new ArrayList<singSongDTO>();
 			while(rset.next()){
-<<<<<<< Updated upstream
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ,rset.getString(5)) );
-=======
 				list.add(new singSongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)));
->>>>>>> Stashed changes
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -141,11 +131,7 @@ public class SongDAO {
 			
 			list = new ArrayList<singSongDTO>();
 			while(rset.next()){
-<<<<<<< Updated upstream
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ,rset.getString(5)) );
-=======
 				list.add(new singSongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ) );
->>>>>>> Stashed changes
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -166,7 +152,7 @@ public class SongDAO {
 			
 			list = new ArrayList<SongDTO>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5)) );
+				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -187,38 +173,11 @@ public class SongDAO {
 			
 			list = new ArrayList<SongDTO>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5)) );
+				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
 		}
 		return list;
 	}
-<<<<<<< Updated upstream
-	
-	public void addSongsFromFile(String f) throws NumberFormatException, SQLException {
-		try{
-			//파일 객체 생성
-			File file = new File(f);
-			//입력 스트림 생성
-			FileReader filereader = new FileReader(file);
-			//입력 버퍼 생성
-			BufferedReader bufReader = new BufferedReader(filereader);
-			String line = "";
-			while((line = bufReader.readLine()) != null){
-				String[] e = line.split("\t");
-	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
-				addSong(new SongDTO(Integer.parseInt(e[0]),e[1],e[2],e[3],"aaaa"));
-			}
-	  //.readLine()은 끝에 개행문자를 읽지 않는다.            
-			bufReader.close();
-		}catch (FileNotFoundException e) {
-	      // TODO: handle exception
-		}catch(IOException e){
-			System.out.println(e);
-		}
-	}
-	
-=======
->>>>>>> Stashed changes
 }

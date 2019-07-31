@@ -10,17 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import music.model.dto.SingerDTO;
-import music.model.dto.singSongDTO;
 import music.model.util.DBUtil;
 
 public class SingerDAO {
 
 	private static SingerDAO instance = new SingerDAO();
 
-	private SingerDAO() {
-	};
+	private SingerDAO() {};
 
 	public static SingerDAO getInstance() {
 		return instance;
@@ -41,10 +38,6 @@ public class SingerDAO {
 			if (result == 1) {
 				return true;
 			}
-<<<<<<< Updated upstream
-			
-=======
->>>>>>> Stashed changes
 		} finally {
 			DBUtil.close(con, pstmt);
 		}
@@ -53,53 +46,36 @@ public class SingerDAO {
 
 
 	public void addSingersFromFile(String f) throws NumberFormatException, SQLException {
-<<<<<<< Updated upstream
-		try{
-			//파일 객체 생성
-=======
+
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
 			// 파일 객체 생성
->>>>>>> Stashed changes
 			File file = new File(f);
 			// 입력 스트림 생성
 			FileReader filereader = new FileReader(file);
 			// 입력 버퍼 생성
 			BufferedReader bufReader = new BufferedReader(filereader);
 			String line = "";
-<<<<<<< Updated upstream
-			while((line = bufReader.readLine()) != null){
-				String[] e = line.split("\t");
-	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
-				addSinger(new SingerDTO(Integer.parseInt(e[0]),e[1]));
-=======
 
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("insert into singer values(?, ?)");
 			while ((line = bufReader.readLine()) != null) {
 				String[] e = line.split("\t");
-				// System.out.println(Integer.parseInt(e[0])+" "+e[1]);
 				pstmt.setInt(1, Integer.parseInt(e[1]));
 				pstmt.setString(2, e[0]);
 				try {
-					int result = pstmt.executeUpdate();
+					pstmt.executeUpdate();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
-
->>>>>>> Stashed changes
 			}
 			// .readLine()은 끝에 개행문자를 읽지 않는다.
 			bufReader.close();
 		} catch (FileNotFoundException e) {
-<<<<<<< Updated upstream
-	      // TODO: handle exception
-=======
-			// TODO: handle exception
->>>>>>> Stashed changes
+			e.getStackTrace();
 		} catch (IOException e) {
-			System.out.println(e);
+			e.getStackTrace();
 		}
 	}
 	

@@ -1,5 +1,11 @@
 package music.model.dto;
 
-public class SingerDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data@NoArgsConstructor@AllArgsConstructor
+public class SingerDTO {
+	private int id;
+	private String name;
 }

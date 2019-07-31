@@ -1,5 +1,26 @@
 package music.model.dto;
 
-public class SongDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data@NoArgsConstructor@AllArgsConstructor
+public class SongDTO {
+	private int id;
+	private String name;
+	private String singer;
+	private String date;
+	private String lyrics;
+	
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("제목 : ");
+		builder.append(name);
+		builder.append(" , 가수 : ");
+		builder.append(singer);
+		builder.append(" , 발매일 : ");
+		builder.append(date);
+		return builder.toString();
+		
+	}
 }

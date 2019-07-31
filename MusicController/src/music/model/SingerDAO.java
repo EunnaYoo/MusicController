@@ -79,8 +79,8 @@ public class SingerDAO {
 			while((line = bufReader.readLine()) != null){
 				String[] e = line.split("\t");
 	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
-				pstmt.setInt(1, Integer.parseInt(e[0]));
-				pstmt.setString(2, e[1]);
+				pstmt.setInt(1, Integer.parseInt(e[1]));
+				pstmt.setString(2, e[0]);
 				try {
 					int result = pstmt.executeUpdate();
 				} catch (Exception e2) {

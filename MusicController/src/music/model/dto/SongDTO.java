@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class SongDTO {
 	private int id;
 	private String name;
-	private String singer;
+	private int singer;
 	private String date;
 	
 	public String toString() {

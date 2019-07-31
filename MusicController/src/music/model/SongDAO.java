@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import music.model.dto.SongDTO;
 import music.model.util.DBUtil;
@@ -29,7 +30,7 @@ public class SongDAO {
 			pstmt = con.prepareStatement("insert into song values(?, ?, ?, ?)");
 			pstmt.setInt(1, song.getId());
 			pstmt.setString(2, song.getName());
-			pstmt.setString(3, song.getSinger());
+			pstmt.setInt(3, song.getSinger());
 			pstmt.setString(4, song.getDate());
 			
 			int result = pstmt.executeUpdate();
@@ -55,7 +56,7 @@ public class SongDAO {
 			
 			list = new ArrayList<SongDTO>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4)) );
+				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getInt(3),rset.getString(4)) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -77,7 +78,7 @@ public class SongDAO {
 			
 			list = new ArrayList<SongDTO>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ) );
+				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getInt(3),rset.getString(4) ) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -98,7 +99,7 @@ public class SongDAO {
 			
 			list = new ArrayList<SongDTO>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)) );
+				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getInt(3), rset.getString(4)) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -119,7 +120,7 @@ public class SongDAO {
 			
 			list = new ArrayList<SongDTO>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)) );
+				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getInt(3), rset.getString(4)) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -132,24 +133,26 @@ public class SongDAO {
 		PreparedStatement pstmt = null;
 		try{
 			//파일 객체 생성
-			File file = new File("C:\\0.encore\\01.java\\step11_jsoupTest\\singerList.txt");
+			File file = new File(f);
 			//입력 스트림 생성
 			FileReader filereader = new FileReader(file);
 			//입력 버퍼 생성
 			BufferedReader bufReader = new BufferedReader(filereader);
 			String line = "";
-
+			
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("insert into song values(?, ?,?,?)");
 			while((line = bufReader.readLine()) != null){
 				String[] e = line.split("\t");
 	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
 				pstmt.setInt(1, Integer.parseInt(e[0]));
 				pstmt.setString(2, e[1]);
-				pstmt.setString(3, e[2]);
+				pstmt.setInt(3, Integer.parseInt(e[2]));
 				pstmt.setString(4, e[3]);
-				pstmt.setString(5, e[4]);
 				try {
 					int result = pstmt.executeUpdate();
 				} catch (Exception e2) {
+					System.out.println(Arrays.toString(e));
 					e2.printStackTrace();
 				}
 			

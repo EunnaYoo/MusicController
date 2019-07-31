@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import music.model.dto.SongDTO;
+import music.model.dto.singSongDTO;
 import music.model.util.DBUtil;
 
 public class SongDAO {
@@ -46,20 +47,73 @@ public class SongDAO {
 		return false;
 	}
 	
+<<<<<<< Updated upstream
 	//노래 검색(비슷한 곡들 나오게)
 	public ArrayList<SongDTO> getSongs(String name) throws SQLException{
+=======
+	public void addSongsFromFile(String f) throws NumberFormatException, SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try{
+			//파일 객체 생성
+			File file = new File(f);
+			//입력 스트림 생성
+			FileReader filereader = new FileReader(file);
+			//입력 버퍼 생성
+			BufferedReader bufReader = new BufferedReader(filereader);
+			String line = "";
+			
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("insert into song values(?, ?,?,?)");
+			
+			while((line = bufReader.readLine()) != null){
+				String[] e = line.split("\t");
+				pstmt.setInt(1, Integer.parseInt(e[0]));
+				pstmt.setString(2, e[1]);
+				pstmt.setInt(3, Integer.parseInt(e[2]));
+				pstmt.setString(4, e[3]);
+				try {
+					pstmt.executeUpdate();
+				} catch (Exception e2) {
+					System.out.println(Arrays.toString(e));
+					e2.printStackTrace();
+				}
+				
+			}
+			//.readLine()은 끝에 개행문자를 읽지 않는다.            
+			bufReader.close();
+		}catch (FileNotFoundException e) {
+			e.getStackTrace();
+		}catch(IOException e){
+			e.getStackTrace();
+		}
+	}
+
+	// 제목으로 노래 검색
+	public ArrayList<singSongDTO> getSongs(String title) throws SQLException{
+>>>>>>> Stashed changes
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		ArrayList<SongDTO> list = null;
+		ArrayList<singSongDTO> list = null;
+		
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from (select * from song where name like '"+name+ "%' order by name) where rownum<=20");
+			pstmt = con.prepareStatement("select sg.song_id, sg.song_name, s.singer_name, sg.release_date " + 
+					"from song sg inner join singer s " + 
+					"on sg.singer_id = s.singer_id " + 
+					"where sg.song_name like '"+title+"%' " + 
+					"order by sg.song_name");
+			
 			rset = pstmt.executeQuery();
 			
-			list = new ArrayList<SongDTO>();
+			list = new ArrayList<singSongDTO>();
 			while(rset.next()){
+<<<<<<< Updated upstream
 				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ,rset.getString(5)) );
+=======
+				list.add(new singSongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)));
+>>>>>>> Stashed changes
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -67,21 +121,31 @@ public class SongDAO {
 		return list;
 	}
 	
-	//가수로 노래검색
-	public ArrayList<SongDTO> getSongsBySinger(String name) throws SQLException{
+	// 가수로 노래검색
+	public ArrayList<singSongDTO> getSongsBySinger(int id) throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		ArrayList<SongDTO> list = null;
+		ArrayList<singSongDTO> list = null;
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from song where singer =?");
-			pstmt.setString(1, name);
+			pstmt = con.prepareStatement("select sg.song_id, sg.song_name, s.singer_name, sg.release_date " + 
+					"from song sg inner join singer s " + 
+					"on sg.singer_id = s.singer_id " + 
+					"where s.singer_id = ? " + 
+					"order by sg.song_name");
+			
+			pstmt.setInt(1, id);
+			
 			rset = pstmt.executeQuery();
 			
-			list = new ArrayList<SongDTO>();
+			list = new ArrayList<singSongDTO>();
 			while(rset.next()){
+<<<<<<< Updated upstream
 				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ,rset.getString(5)) );
+=======
+				list.add(new singSongDTO(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ) );
+>>>>>>> Stashed changes
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);
@@ -130,6 +194,7 @@ public class SongDAO {
 		}
 		return list;
 	}
+<<<<<<< Updated upstream
 	
 	public void addSongsFromFile(String f) throws NumberFormatException, SQLException {
 		try{
@@ -154,4 +219,6 @@ public class SongDAO {
 		}
 	}
 	
+=======
+>>>>>>> Stashed changes
 }

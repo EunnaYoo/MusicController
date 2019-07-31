@@ -3,16 +3,21 @@ package music.view;
 import music.controller.Controller;
 
 public class StartView {
-	private static Controller controller = Controller.getInstance();
-	
-	public static void main(String[] args) {
-//		controller.getSongList("가지 마");
 
+	public static void main(String[] args) {
+
+<<<<<<< Updated upstream
 		//controller.getSingerList("윤");
 		try {
 			controller.addSingersFromFile("C:\\Git\\MusicController\\singerList.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+=======
+		Controller controller = Controller.getInstance();
+
+		controller.getSongList("가지 마");
+		controller.getSingerList("나");
+>>>>>>> Stashed changes
 	}
 }

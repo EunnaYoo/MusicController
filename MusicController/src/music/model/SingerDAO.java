@@ -12,77 +12,116 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import music.model.dto.SingerDTO;
-import music.model.dto.SongDTO;
+import music.model.dto.singSongDTO;
 import music.model.util.DBUtil;
 
 public class SingerDAO {
-	private static SingerDAO instance= new SingerDAO();
-	private SingerDAO() {};
+
+	private static SingerDAO instance = new SingerDAO();
+
+	private SingerDAO() {
+	};
+
 	public static SingerDAO getInstance() {
 		return instance;
 	}
-	//추가
-	public boolean addSinger(SingerDTO singer) throws SQLException{
+
+	// 추가
+	public boolean addSinger(SingerDTO singer) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		try{
+		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("insert into singer values(?, ?)");
 			pstmt.setInt(1, singer.getId());
 			pstmt.setString(2, singer.getName());
-			
+
 			int result = pstmt.executeUpdate();
-		
-			if(result == 1){
+
+			if (result == 1) {
 				return true;
 			}
+<<<<<<< Updated upstream
 			
+=======
+>>>>>>> Stashed changes
 		} finally {
 			DBUtil.close(con, pstmt);
 		}
 		return false;
 	}
-	
-	public ArrayList<SingerDTO> getSingers(String name) throws SQLException{
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		ArrayList<SingerDTO> list = null;
-		try{
-			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from (select * from singer where name like '"+name+ "%' order by name) where rownum<=20");
-			rset = pstmt.executeQuery();
-			
-			list = new ArrayList<SingerDTO>();
-			while(rset.next()){
-				list.add(new SingerDTO(rset.getInt(1), rset.getString(2)) );
-			}
-		}finally{
-			DBUtil.close(con, pstmt, rset);
-		}
-		return list;
-	}
-	
+
+
 	public void addSingersFromFile(String f) throws NumberFormatException, SQLException {
+<<<<<<< Updated upstream
 		try{
 			//파일 객체 생성
+=======
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			// 파일 객체 생성
+>>>>>>> Stashed changes
 			File file = new File(f);
-			//입력 스트림 생성
+			// 입력 스트림 생성
 			FileReader filereader = new FileReader(file);
-			//입력 버퍼 생성
+			// 입력 버퍼 생성
 			BufferedReader bufReader = new BufferedReader(filereader);
 			String line = "";
+<<<<<<< Updated upstream
 			while((line = bufReader.readLine()) != null){
 				String[] e = line.split("\t");
 	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
 				addSinger(new SingerDTO(Integer.parseInt(e[0]),e[1]));
+=======
+
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("insert into singer values(?, ?)");
+			while ((line = bufReader.readLine()) != null) {
+				String[] e = line.split("\t");
+				// System.out.println(Integer.parseInt(e[0])+" "+e[1]);
+				pstmt.setInt(1, Integer.parseInt(e[1]));
+				pstmt.setString(2, e[0]);
+				try {
+					int result = pstmt.executeUpdate();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+
+>>>>>>> Stashed changes
 			}
-	  //.readLine()은 끝에 개행문자를 읽지 않는다.            
+			// .readLine()은 끝에 개행문자를 읽지 않는다.
 			bufReader.close();
 		} catch (FileNotFoundException e) {
+<<<<<<< Updated upstream
 	      // TODO: handle exception
+=======
+			// TODO: handle exception
+>>>>>>> Stashed changes
 		} catch (IOException e) {
 			System.out.println(e);
 		}
 	}
+	
+	// 가수 검색
+	public ArrayList<SingerDTO> getSingers(String name) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		ArrayList<SingerDTO> list = null;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("select * from singer where singer_name like '" + name + "%'");
+			rset = pstmt.executeQuery();
+			
+			list = new ArrayList<SingerDTO>();
+			while (rset.next()) {
+				list.add(new SingerDTO(rset.getInt(1), rset.getString(2)));
+			}
+		} finally {
+			DBUtil.close(con, pstmt, rset);
+		}
+		return list;
+	}
 }
+

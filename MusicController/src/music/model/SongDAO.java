@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import music.model.dto.PrintSong;
 import music.model.dto.SongDTO;
 import music.model.util.DBUtil;
 
@@ -43,7 +44,7 @@ public class SongDAO {
 		}
 		return false;
 	}
-	//노래 검색(비슷한 곡들 나오게)
+	//노래 검색(관리자용)
 	public ArrayList<SongDTO> getSongs(String name) throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -51,7 +52,7 @@ public class SongDAO {
 		ArrayList<SongDTO> list = null;
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from (select * from song where name like '"+name+ "%' order by name) where rownum<=20");
+			pstmt = con.prepareStatement("select * from (select * from song where song_name like '"+name+ "%' order by song_name) where rownum<=20");
 			rset = pstmt.executeQuery();
 			
 			list = new ArrayList<SongDTO>();
@@ -64,21 +65,52 @@ public class SongDAO {
 		return list;
 	}
 	
+	
+	//노래 검색(관리자용)
+		public ArrayList<PrintSong> printSongs(String name) throws SQLException{
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			ArrayList<PrintSong> list = null;
+			try{
+				con = DBUtil.getConnection();
+				pstmt = con.prepareStatement("select sg.song_id, sg.song_name, s.singer_name, sg.release_date " + 
+						"from song sg inner join singer s " + 
+						"on sg.singer_id = s.singer_id " + 
+						"where sg.song_name like '" + name + "%' " + 
+						"order by sg.song_name");
+				rset = pstmt.executeQuery();
+				
+				list = new ArrayList<PrintSong>();
+				while(rset.next()){
+					list.add(new PrintSong(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4)) );
+				}
+			}finally{
+				DBUtil.close(con, pstmt, rset);
+			}
+			return list;
+		}
+	
+	
 	//가수로 노래검색
-	public ArrayList<SongDTO> getSongsBySinger(String name) throws SQLException{
+	public ArrayList<PrintSong> getSongsBySinger(int id) throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		ArrayList<SongDTO> list = null;
+		ArrayList<PrintSong> list = null;
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from song where singer =?");
-			pstmt.setString(1, name);
+			pstmt = con.prepareStatement("select sg.song_id, sg.song_name, s.singer_name, sg.release_date " + 
+					"from song sg inner join singer s " + 
+					"on sg.singer_id = s.singer_id " + 
+					"where s.singer_id = ? " + 
+					"order by sg.song_name");
+			pstmt.setInt(1, id);
 			rset = pstmt.executeQuery();
 			
-			list = new ArrayList<SongDTO>();
+			list = new ArrayList<PrintSong>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getInt(3),rset.getString(4) ) );
+				list.add(new PrintSong(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4) ) );
 			}
 		}finally{
 			DBUtil.close(con, pstmt, rset);

@@ -6,7 +6,14 @@ import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import music.controller.Controller;
+import music.model.dto.PrintSong;
+import music.model.dto.SongDTO;
+
 public class EndView {
+	
+	private static Controller controller = Controller.getInstance();
+	
 	public static void watchMovie (String song, String singer) {
 		Document doc = null;
 		String address="https://www.youtube.com/results?search_query=";
@@ -28,8 +35,10 @@ public class EndView {
 		public static void showSongList(ArrayList songList){
 			int length = songList.size();
 			if( length != 0 ){
-				for(int index = 0; index < length; index++){			
+				for(int index = 0; index < length; index++){
+//					PrintSong eachSong = songList.get(index);
 					System.out.println("¸ñ·Ï " + (index+1) + " - " + songList.get(index));
+					
 				}
 			}else {
 				System.out.println("¾ø¾û");

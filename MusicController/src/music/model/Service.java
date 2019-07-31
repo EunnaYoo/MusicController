@@ -3,6 +3,7 @@ package music.model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import music.model.dto.PrintSong;
 import music.model.dto.SingerDTO;
 import music.model.dto.SongDTO;
 
@@ -20,14 +21,18 @@ public class Service {
 		return songDAO.getSongs(name);
 	}
 	
+	public ArrayList<PrintSong> printSongList(String name) throws SQLException{
+		return songDAO.printSongs(name);
+	}
+	
 	public boolean addSong(SongDTO song) throws SQLException {
 		return songDAO.addSong(song);
 	}
 	public void addSongsFromFile(String f) throws Exception{
 		songDAO.addSongsFromFile(f);
 	}
-	public ArrayList<SongDTO> getSongListBySinger(String name) throws SQLException{
-		return songDAO.getSongsBySinger(name);
+	public ArrayList<PrintSong> getSongListBySinger(int id) throws SQLException{
+		return songDAO.getSongsBySinger(id);
 	}
 	
 	
@@ -38,5 +43,8 @@ public class Service {
 	
 	public void addSingersFromFile(String f) throws Exception{
 		singerDAO.addSingersFromFile(f);
+	}
+	public String getNameFromId(int id) throws Exception{
+		return singerDAO.getNameFromId(id);
 	}
 }

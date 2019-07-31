@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import music.exception.NotExistException;
 import music.model.dto.SingerDTO;
 import music.model.dto.SongDTO;
 import music.model.util.DBUtil;
@@ -49,7 +50,7 @@ public class SingerDAO {
 		ArrayList<SingerDTO> list = null;
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from (select * from singer where name like '"+name+ "%' order by name) where rownum<=20");
+			pstmt = con.prepareStatement("select * from (select * from singer where singer_name like '"+name+ "%' order by singer_name) where rownum <=20");
 			rset = pstmt.executeQuery();
 			
 			list = new ArrayList<SingerDTO>();
@@ -60,6 +61,29 @@ public class SingerDAO {
 			DBUtil.close(con, pstmt, rset);
 		}
 		return list;
+	}
+	
+	public String getNameFromId(int id) throws SQLException, NotExistException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String result = null;
+		try{
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("select singer_name from singer where singer_id =?");
+			pstmt.setInt(1, id);
+			rset = pstmt.executeQuery();
+			
+			System.out.println("123123");
+//			System.out.println(rset.getString(1));
+			result = rset.getString(1);
+			
+		} finally{
+			DBUtil.close(con, pstmt, rset);
+		}
+		
+		return result;
 	}
 	
 	public void addSingersFromFile(String f) throws NumberFormatException, SQLException {

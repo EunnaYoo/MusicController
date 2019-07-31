@@ -62,11 +62,12 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
+	
 	public void addSongFromFile(String f) throws Exception{
 		service.addSongsFromFile(f);
 	}
+	
 	public void addSingersFromFile(String f) throws Exception{
 		service.addSingersFromFile(f);
 	}
-	
 }

@@ -15,11 +15,13 @@ import music.model.dto.SongDTO;
 import music.model.util.DBUtil;
 
 public class SongDAO {
+	
 	private static SongDAO instance= new SongDAO();
 	private SongDAO() {};
 	public static SongDAO getInstance() {
 		return instance;
 	}
+	
 	//추가
 	public boolean addSong(SongDTO song) throws SQLException{
 		Connection con = null;
@@ -43,6 +45,7 @@ public class SongDAO {
 		}
 		return false;
 	}
+	
 	//노래 검색(비슷한 곡들 나오게)
 	public ArrayList<SongDTO> getSongs(String name) throws SQLException{
 		Connection con = null;

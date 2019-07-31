@@ -36,7 +36,8 @@ public class SingerDAO {
 			if(result == 1){
 				return true;
 			}
-		}finally{
+			
+		} finally {
 			DBUtil.close(con, pstmt);
 		}
 		return false;
@@ -78,9 +79,9 @@ public class SingerDAO {
 			}
 	  //.readLine()은 끝에 개행문자를 읽지 않는다.            
 			bufReader.close();
-		}catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 	      // TODO: handle exception
-		}catch(IOException e){
+		} catch (IOException e) {
 			System.out.println(e);
 		}
 	}

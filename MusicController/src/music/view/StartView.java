@@ -8,6 +8,11 @@ public class StartView {
 	public static void main(String[] args) {
 //		controller.getSongList("°¡Áö ¸¶");
 
-		controller.getSingerList("À±");
+		//controller.getSingerList("À±");
+		try {
+			controller.addSingersFromFile("C:\\Git\\MusicController\\singerList.txt");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

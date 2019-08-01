@@ -37,6 +37,15 @@ public class Service {
 		return songDAO.getSongsBySinger(id);
 	}
 	
+	// NewSong
+	public boolean addNewSong(String date) throws SQLException {
+		return songDAO.addNewSong(date);
+	}
+	
+	public ArrayList<singSongDTO> getNewSong() throws SQLException {
+		return songDAO.getNewSong();
+	}
+	
 	
 	// Singer
 	public boolean addSinger(SingerDTO singer) throws SQLException {

@@ -194,20 +194,25 @@ public class SongDAO {
 		PreparedStatement pstmt = null;
 		try {
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("insert into new_song (?, ?)"
-					+ " select song_id, song_name "
+			
+			pstmt = con.prepareStatement("delete from new_song");
+			pstmt.close();
+			
+			pstmt = null;
+			pstmt = con.prepareStatement("insert into new_song "
+					+ "select song_id "
 					+ "from song "
 					+ "where release_date = ?");
 			
 			pstmt.setString(1, date);
 			
 			int result = pstmt.executeUpdate();
-		
-			if(result == 1){
+			
+			if(result >= 1){
 				return true;
 			}
 			
-		} finally{
+		} finally {
 			DBUtil.close(con, pstmt);
 		}
 		return false;

@@ -16,9 +16,7 @@ import music.model.util.DBUtil;
 public class SingerDAO {
 
 	private static SingerDAO instance = new SingerDAO();
-
 	private SingerDAO() {};
-
 	public static SingerDAO getInstance() {
 		return instance;
 	}

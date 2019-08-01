@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -77,14 +78,14 @@ public class SongDAO {
 			}
 			//.readLine()은 끝에 개행문자를 읽지 않는다.            
 			bufReader.close();
-		}catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			e.getStackTrace();
-		}catch(IOException e){
+		} catch(IOException e){
 			e.getStackTrace();
 		}
 	}
 	
-	public static boolean deleteSong(int songId) throws SQLException {
+	public boolean deleteSong(int songId) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -158,28 +159,62 @@ public class SongDAO {
 		return list;
 	}
 	
-	//getLatest
-	public ArrayList<SongDTO> getLatest() throws SQLException{
+	// NewSong
+	// getNewSong
+	public ArrayList<singSongDTO> getNewSong() throws SQLException{
 		Connection con = null;
-		PreparedStatement pstmt = null;
+		Statement stmt = null;
 		ResultSet rset = null;
-		ArrayList<SongDTO> list = null;
+		ArrayList<singSongDTO> list = null;
+		
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from latest");
-			rset = pstmt.executeQuery();
+			stmt = con.createStatement();
+			rset = stmt.executeQuery("select s.song_id, s.song_name, sg.singer_name, s.release_date " + 
+					"from new_song ns inner join song s " + 
+					"on ns.song_id = s.song_id " + 
+					"inner join singer sg " + 
+					"on s.singer_id = sg.singer_id");
 			
-			list = new ArrayList<SongDTO>();
+			list = new ArrayList<singSongDTO>();
+			
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)) );
+				list.add(new singSongDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4)) );
 			}
-		}finally{
-			DBUtil.close(con, pstmt, rset);
+			
+		} finally{
+			DBUtil.close(con, stmt, rset);
 		}
 		return list;
 	}
 	
-	//getPopular
+	// addNewSong
+	public boolean addNewSong(String date) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("insert into new_song (?, ?)"
+					+ " select song_id, song_name "
+					+ "from song "
+					+ "where release_date = ?");
+			
+			pstmt.setString(1, date);
+			
+			int result = pstmt.executeUpdate();
+		
+			if(result == 1){
+				return true;
+			}
+			
+		} finally{
+			DBUtil.close(con, pstmt);
+		}
+		return false;
+	}
+	
+	
+	// getPopular
 	public ArrayList<SongDTO> getPopular() throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;

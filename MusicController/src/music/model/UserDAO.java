@@ -17,11 +17,12 @@ public class UserDAO {
 	}
 	
 	// 전체 users 목록 보기
-	public static ArrayList<UserDTO> getAllUsers() throws SQLException {
+	public ArrayList<UserDTO> getAllUsers() throws SQLException {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
+		
 		ArrayList<UserDTO> list = null;
 		
 		try {
@@ -67,7 +68,7 @@ public class UserDAO {
 	}
 	
 	// 삭제
-	public static boolean deleteUsers(int usersId) throws SQLException {
+	public boolean deleteUsers(int usersId) throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;

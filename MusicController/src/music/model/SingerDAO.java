@@ -79,6 +79,25 @@ public class SingerDAO {
 		}
 	}
 	
+	public static boolean deleteSinger(int singerId) throws SQLException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("delete from singer where singer_id=?");
+			pstmt.setInt(1, singerId);
+			int result = pstmt.executeUpdate();
+			if (result == 1) {
+				return true;
+			}
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
+		return false;
+	}
+	
 	// 가수 검색
 	public ArrayList<SingerDTO> getSingers(String name) throws SQLException {
 		Connection con = null;

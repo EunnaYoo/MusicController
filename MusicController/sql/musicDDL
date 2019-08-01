@@ -26,7 +26,8 @@ create table song(
 
 create table users(
 	user_id number(5) primary key,
-	user_name varchar2(20) not null
+	user_name varchar2(20) not null,
+	user_password varchar2(4) not null
 );
 
 create table song_user_mapping (
@@ -44,9 +45,9 @@ create table popular_chart (
 	song_name varchar2(100) not null
 );
 
-alter table song add foreign key (singer_id) references singer (singer_id);
-alter table song_user_mapping add foreign key (song_id) references song (song_id);
-alter table song_user_mapping add foreign key (user_id) references users (user_id);
-alter table new_song add foreign key (song_id) references song (song_id);
-alter table popular_chart add foreign key (song_id) references song (song_id);
+alter table song add foreign key (singer_id) references singer (singer_id) on delete cascade; 
+alter table song_user_mapping add foreign key (song_id) references song (song_id) on delete cascade;
+alter table song_user_mapping add foreign key (user_id) references users (user_id) on delete cascade;
+alter table new_song add foreign key (song_id) references song (song_id) on delete cascade;
+alter table popular_chart add foreign key (song_id) references song (song_id) on delete cascade;
 

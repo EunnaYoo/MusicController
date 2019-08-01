@@ -12,9 +12,9 @@ import music.model.dto.UserDTO;
 import music.view.EndView;
 
 public class AdminController {
-	private static UsersController instance = new UsersController();
-	private UsersController() {};
-	public static UsersController getInstance() {
+	private static AdminController instance = new AdminController();
+	private AdminController() {};
+	public static AdminController getInstance() {
 		return instance;
 	}
 	
@@ -126,6 +126,34 @@ public class AdminController {
 			EndView.successView("추가 성공");
 		}else {
 			EndView.failView("추가 실패");
+		}
+	}
+	
+	public void addNewSong(String date) {
+		boolean result;
+		try {
+			result = service.addNewSong(date);
+			if(result) {
+				EndView.successView("최신차트 갱신 성공");
+			}else {
+				EndView.failView("최신차트 갱신 실패");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void updatePopularChart() {
+		try {
+			boolean result = service.updatePopularChart();
+			if(result) {
+				EndView.successView("인기차트 갱신");
+			}else {
+				EndView.failView("인기차트 갱신 실패");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

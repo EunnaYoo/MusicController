@@ -39,17 +39,23 @@ public class UsersController {
 		try {
 			ArrayList<PrintSong> songList = service.printSongList(name);
 			EndView.showSongList(songList);
+			ArrayList<Integer> indexList = new ArrayList<>();
+			for (PrintSong eachSong : songList) {
+				indexList.add(eachSong.getId());
+			}
 			EndView.message("곡 번호를 입력해주세요");
-			PrintSong aim = songList.get(sc.nextInt()-1);
+			PrintSong aim = songList.get(indexList.indexOf(sc.nextInt()));
 			EndView.message("1.듣기 2.내 목록에 추가 3.내 목록에 추가 후 듣기");
 			int req = sc.nextInt();
 			if(req == 1) {
+				service.addPopularity(aim.getId());
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			}else if(req ==2) {
 				EndView.message("ID를 입력해주세요");
 				service.addMyList(aim.getId(), sc.nextInt());
 			}else if(req == 3) {
 				EndView.message("ID를 입력해주세요");
+				service.addPopularity(aim.getId());
 				service.addMyList(aim.getId(), sc.nextInt());
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			}else {
@@ -73,6 +79,7 @@ public class UsersController {
 			
 			EndView.message("곡 번호를 입력해주세요");
 			PrintSong aim2 = songList.get(sc.nextInt()-1);
+			service.addPopularity(aim2.getId());
 			EndView.watchMovie(aim2.getName(), aim2.getSinger());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,6 +118,7 @@ public class UsersController {
 		}
 	}
 	
+
 	public void getNew() {
 		try {
 			ArrayList<PrintSong> songList = service.getNew();
@@ -134,6 +142,31 @@ public class UsersController {
 			}
 		} catch (SQLException e) {
 			EndView.failView("최신차트 검색 실패");
+			e.printStackTrace();
+		}
+	}
+	public void getPopular() {
+		try {
+			ArrayList<PrintSong> songList =  service.getPopular();
+			EndView.showSongList(songList);
+			EndView.message("곡 번호를 입력해주세요");
+			PrintSong aim = songList.get(sc.nextInt()-1);
+			EndView.message("1.듣기 2.내 목록에 추가 3.내 목록에 추가 후 듣기");
+			int req = sc.nextInt();
+			if(req == 1) {
+				EndView.watchMovie(aim.getName(), aim.getSinger());
+			}else if(req ==2) {
+				EndView.message("ID를 입력해주세요");
+				service.addMyList(aim.getId(), sc.nextInt());
+			}else if(req == 3) {
+				EndView.message("ID를 입력해주세요");
+				service.addMyList(aim.getId(), sc.nextInt());
+				EndView.watchMovie(aim.getName(), aim.getSinger());
+			}else {
+				EndView.failView("1, 2, 3 중에서 입력하라고...");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

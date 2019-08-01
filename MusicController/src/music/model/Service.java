@@ -37,7 +37,9 @@ public class Service {
 	public ArrayList<PrintSong> getSongListBySinger(int id) throws SQLException{
 		return songDAO.getSongsBySinger(id);
 	}
-	
+	public boolean addPopularity(int songId) throws SQLException {
+		return songDAO.addPopularity(songId);
+	}
 	
 	////////////////////////////////Singer
 	public ArrayList<SingerDTO> getSingerList(String name) throws SQLException{
@@ -65,5 +67,14 @@ public class Service {
 	/////// 차트 업데이트
 	public ArrayList<PrintSong> getNew() throws SQLException{
 		return songDAO.getNew();
+	}
+	public boolean addNewSong(String date) throws SQLException {
+		return songDAO.addNewSong(date);
+	}
+	public boolean updatePopularChart() throws SQLException {
+		return songDAO.updatePopularChart();
+	}
+	public ArrayList<PrintSong> getPopular() throws SQLException {
+		return songDAO.getPopular();
 	}
 }

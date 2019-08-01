@@ -23,9 +23,9 @@ public class EndView {
 			e.printStackTrace();
 		}
 		//+노래방으로 검색할까?????????
-		String finalAddress = doc.select("h3 > a").get(0).attr("href");
+		String finalAddress = doc.select("h3 > a").get(0).attr("href").replace("watch", "watch_popup");
 		try {
-			Runtime.getRuntime().exec(new String[]{"cmd", "/c","start chrome https://www.youtube.com"+finalAddress});
+			Runtime.getRuntime().exec(new String[]{"cmd", "/c","start iexplore https://www.youtube.com"+finalAddress});
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

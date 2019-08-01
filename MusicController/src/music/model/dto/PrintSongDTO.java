@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data@AllArgsConstructor
-public class PrintSong {
+public class PrintSongDTO {
+	
 	private int id;
 	private String name;
 	private String singer;
@@ -21,6 +22,5 @@ public class PrintSong {
 		builder.append(" , πﬂ∏≈¿œ : ");
 		builder.append(date);
 		return builder.toString();
-		
 	}
 }

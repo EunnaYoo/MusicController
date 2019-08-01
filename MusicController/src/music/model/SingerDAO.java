@@ -15,16 +15,20 @@ import music.model.dto.SingerDTO;
 import music.model.util.DBUtil;
 
 public class SingerDAO {
+	
 	private static SingerDAO instance= new SingerDAO();
-	private SingerDAO() {};
+	private SingerDAO(){};
 	public static SingerDAO getInstance() {
 		return instance;
 	}
+	
 	//추가
-	public boolean addSinger(SingerDTO singer) throws SQLException{
+	public boolean addSinger(SingerDTO singer) throws SQLException {
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		try{
+		
+		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("insert into singer values(?, ?)");
 			pstmt.setInt(1, singer.getId());
@@ -35,55 +39,18 @@ public class SingerDAO {
 			if(result == 1){
 				return true;
 			}
-		}finally{
+			
+		} finally {
 			DBUtil.close(con, pstmt);
 		}
 		return false;
 	}
-	//제거
-	public static boolean deleteSinger(int singerId) throws SQLException {
-
-	      Connection con = null;
-	      PreparedStatement pstmt = null;
-
-	      try {
-	         con = DBUtil.getConnection();
-	         pstmt = con.prepareStatement("delete from singer where singer_id=?");
-	         pstmt.setInt(1, singerId);
-	         int result = pstmt.executeUpdate();
-	         if (result == 1) {
-	            return true;
-	         }
-	      } finally {
-	         DBUtil.close(con, pstmt);
-	      }
-	      return false;
-	}
-	//셀렉트
-	public ArrayList<SingerDTO> getSingers(String name) throws SQLException{
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		ArrayList<SingerDTO> list = null;
-		try{
-			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from (select * from singer where singer_name like '"+name+ "%' order by singer_name) where rownum <=20");
-			rset = pstmt.executeQuery();
-			
-			list = new ArrayList<SingerDTO>();
-			while(rset.next()){
-				list.add(new SingerDTO(rset.getInt(1), rset.getString(2)) );
-			}
-		}finally{
-			DBUtil.close(con, pstmt, rset);
-		}
-		return list;
-	}
-	
 	
 	public void addSingersFromFile(String f) throws NumberFormatException, SQLException {
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		
 		try{
 			File file = new File(f);
 			FileReader filereader = new FileReader(file);
@@ -92,22 +59,76 @@ public class SingerDAO {
 			
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("insert into singer values(?, ?)");
-			while((line = bufReader.readLine()) != null){
+			
+			while((line = bufReader.readLine()) != null) {
 				String[] e = line.split("\t");
-	//          System.out.println(Integer.parseInt(e[0])+"  "+e[1]);
 				pstmt.setInt(1, Integer.parseInt(e[1]));
 				pstmt.setString(2, e[0]);
+				
 				try {
-					int result = pstmt.executeUpdate();
+					pstmt.executeUpdate();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
-			
 			}
+			
 			bufReader.close();
-		}catch (FileNotFoundException e) {
-		}catch(IOException e){
-			System.out.println(e);
+			
+		} catch (FileNotFoundException fn) {
+			fn.getStackTrace(); // 파일이 없을 경우
+		} catch (IOException e) {
+			e.getStackTrace();
 		}
+	}
+	
+	// 가수 검색
+	public ArrayList<SingerDTO> getSingers(String name) throws SQLException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<SingerDTO> list = null;
+		
+		try{
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("select * "
+										+ "from (select * from singer where singer_name like '"+name+ "%' order by singer_name) "
+										+ "where rownum <=20");
+			
+			rset = pstmt.executeQuery();
+			list = new ArrayList<SingerDTO>();
+			
+			while(rset.next()) {
+				list.add(new SingerDTO(rset.getInt(1), rset.getString(2)));
+			}
+			
+		} finally {
+			DBUtil.close(con, pstmt, rset);
+		}
+		return list;
+	}
+	
+	//제거
+	public boolean deleteSinger(int singerId) throws SQLException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("delete from singer where singer_id=?");
+			pstmt.setInt(1, singerId);
+
+			int result = pstmt.executeUpdate();
+
+			if (result == 1) {
+				return true;
+			}
+
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
+		return false;
 	}
 }

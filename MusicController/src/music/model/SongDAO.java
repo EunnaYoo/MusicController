@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -63,7 +64,7 @@ public class SongDAO {
 	      }
 	      return false;
 	}
-	//노래 검색(관리자용)
+	//노래 검색(관리자용)   SongDTO(SongId, SongName, SingerId, Date)
 	public ArrayList<SongDTO> getSongs(String name) throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -85,31 +86,30 @@ public class SongDAO {
 	}
 	
 	
-	//노래 검색(관리자용)
-		public ArrayList<PrintSong> printSongs(String name) throws SQLException{
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rset = null;
-			ArrayList<PrintSong> list = null;
-			try{
-				con = DBUtil.getConnection();
-				pstmt = con.prepareStatement("select sg.song_id, sg.song_name, s.singer_name, sg.release_date " + 
-						"from song sg inner join singer s " + 
-						"on sg.singer_id = s.singer_id " + 
-						"where sg.song_name like '" + name + "%' " + 
-						"order by sg.song_name");
-				rset = pstmt.executeQuery();
-				
-				list = new ArrayList<PrintSong>();
-				while(rset.next()){
-					list.add(new PrintSong(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4)) );
-				}
-			}finally{
-				DBUtil.close(con, pstmt, rset);
+	//노래 검색  PrintSong(songId,songName,SingerName,Date)
+	public ArrayList<PrintSong> printSongs(String name) throws SQLException{
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		ArrayList<PrintSong> list = null;
+		try{
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("select sg.song_id, sg.song_name, s.singer_name, sg.release_date " + 
+					"from song sg inner join singer s " + 
+					"on sg.singer_id = s.singer_id " + 
+					"where sg.song_name like '" + name + "%' " + 
+					"order by sg.song_name");
+			rset = pstmt.executeQuery();
+			
+			list = new ArrayList<PrintSong>();
+			while(rset.next()){
+				list.add(new PrintSong(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4)) );
 			}
-			return list;
+		}finally{
+			DBUtil.close(con, pstmt, rset);
 		}
-	
+		return list;
+	}
 	
 	//가수로 노래검색
 	public ArrayList<PrintSong> getSongsBySinger(int id) throws SQLException{
@@ -136,24 +136,51 @@ public class SongDAO {
 		}
 		return list;
 	}
-	
-	//getLatest
-	public ArrayList<SongDTO> getLatest() throws SQLException{
+	//////////////////////////////// Latest chart
+	// addNewSong
+	public boolean addNewSong(String date) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("insert into new_song (?, ?)" + " select song_id, song_name " + "from song "
+					+ "where release_date = ?");
+
+			pstmt.setString(1, date);
+
+			int result = pstmt.executeUpdate();
+
+			if (result == 1) {
+				return true;
+			}
+
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
+		return false;
+	}
+
+	//getLatest
+	public ArrayList<PrintSong> getNew() throws SQLException{
+		Connection con = null;
+		Statement stmt = null;
 		ResultSet rset = null;
-		ArrayList<SongDTO> list = null;
+		ArrayList<PrintSong> list = null;
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from latest");
-			rset = pstmt.executeQuery();
+			stmt=con.createStatement();
+			rset = stmt.executeQuery("select s.song_id, s.song_name, sg.singer_name, s.release_date "+
+					"from new_song ns inner join song s "+
+					"on ns.song_id = s.song_id "+
+					"inner join singer sg "+
+					"on s.singer_id = sg.singer_id ");
 			
-			list = new ArrayList<SongDTO>();
+			list = new ArrayList<PrintSong>();
 			while(rset.next()){
-				list.add(new SongDTO(rset.getInt(1), rset.getString(2), rset.getInt(3), rset.getString(4)) );
+				list.add(new PrintSong(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4)) );
 			}
 		}finally{
-			DBUtil.close(con, pstmt, rset);
+			DBUtil.close(con, stmt, rset);
 		}
 		return list;
 	}

@@ -54,8 +54,16 @@ public class Service {
 	
 	
 	
-	//////////차트 업데이트
+	//////////즐겨찾기
 	public boolean addMyList(int songId, int userId) throws SQLException {
 		return chartDAO.addMyList(songId, userId);
+	}
+	public ArrayList<PrintSong> getMyList(int id) throws SQLException{
+		return chartDAO.getMyList(id);
+	}
+	
+	/////// 차트 업데이트
+	public ArrayList<PrintSong> getNew() throws SQLException{
+		return songDAO.getNew();
 	}
 }

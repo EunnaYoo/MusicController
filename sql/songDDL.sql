@@ -36,12 +36,10 @@ create table song_user_mapping (
 
 create table new_song (
    song_id number(5) not null, -- song fk
-   song_name varchar2(100) not null
 );
 
 create table popular_chart (
    song_id number(5) not null, -- song fk
-   song_name varchar2(100) not null
 );
 
 alter table song add foreign key (singer_id) references singer (singer_id) on delete cascade;

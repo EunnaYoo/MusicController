@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import music.controller.Controller;
+import music.controller.UsersController;
 import music.model.dto.PrintSong;
 import music.model.dto.SongDTO;
 
 public class EndView {
 	
-	private static Controller controller = Controller.getInstance();
+	private static UsersController controller = UsersController.getInstance();
 	
 	public static void watchMovie (String song, String singer) {
 		Document doc = null;

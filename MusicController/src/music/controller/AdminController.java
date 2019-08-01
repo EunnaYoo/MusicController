@@ -11,10 +11,10 @@ import music.model.dto.SongDTO;
 import music.model.dto.UserDTO;
 import music.view.EndView;
 
-public class Controller {
-	private static Controller instance = new Controller();
-	private Controller() {};
-	public static Controller getInstance() {
+public class AdminController {
+	private static UsersController instance = new UsersController();
+	private UsersController() {};
+	public static UsersController getInstance() {
 		return instance;
 	}
 	
@@ -35,20 +35,33 @@ public class Controller {
 //		}
 //	}
 	
-	public static void printSongList(String name) {
+	public void printSongList(String name) {
 		try {
 			ArrayList<PrintSong> songList = service.printSongList(name);
 			EndView.showSongList(songList);
 			EndView.message("곡 번호를 입력해주세요");
 			PrintSong aim = songList.get(sc.nextInt()-1);
-			EndView.watchMovie(aim.getName(), aim.getSinger());
+			EndView.message("1.듣기 2.내 목록에 추가 3.내 목록에 추가 후 듣기");
+			int req = sc.nextInt();
+			if(req == 1) {
+				EndView.watchMovie(aim.getName(), aim.getSinger());
+			}else if(req ==2) {
+				EndView.message("ID를 입력해주세요");
+				service.addMyList(aim.getId(), sc.nextInt());
+			}else if(req == 3) {
+				EndView.message("ID를 입력해주세요");
+				service.addMyList(aim.getId(), sc.nextInt());
+				EndView.watchMovie(aim.getName(), aim.getSinger());
+			}else {
+				EndView.failView("1, 2, 3 중에서 입력하라고...");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	//가수검색
-	public static void getSingerList(String name) {
+	public void getSingerList(String name) {
 		try {
 			ArrayList<SingerDTO> singerList = service.getSingerList(name);
 			EndView.showSongList(singerList);
@@ -66,7 +79,7 @@ public class Controller {
 		}
 	}
 	
-	public static void addSong(SongDTO song) {
+	public void addSong(SongDTO song) {
 		try {
 			boolean result = service.addSong(song);
 			if(result ==false) {
@@ -76,11 +89,21 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	public void addSongFromFile(String f) throws Exception{
-		service.addSongsFromFile(f);
+	public void addSongFromFile(String f){
+		try {
+			service.addSongsFromFile(f);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	public void addSingersFromFile(String f) throws Exception{
-		service.addSingersFromFile(f);
+	public void addSingersFromFile(String f){
+		try {
+			service.addSingersFromFile(f);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void addUser(UserDTO user){

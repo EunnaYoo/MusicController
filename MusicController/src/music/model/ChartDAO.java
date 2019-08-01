@@ -2,7 +2,9 @@ package music.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import music.model.dto.PrintSong;
 import music.model.util.DBUtil;
@@ -34,4 +36,32 @@ public class ChartDAO {
 		}
 		return false;
 	}
+	
+	public ArrayList<PrintSong> getMyList(int id) throws SQLException{
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		ArrayList<PrintSong> list = null;
+		try{
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("select s.song_id, s.song_name, sg.singer_name, s.release_date "+
+					"from song_user_mapping sum inner join song s "+
+					"on sum.song_id = s.song_id "+
+					"inner join singer sg "+
+					"on s.singer_id = sg.singer_id "+
+					"where sum.user_id = ?" );
+			pstmt.setInt(1, id);
+			rset = pstmt.executeQuery();
+			
+			list = new ArrayList<PrintSong>();
+			while(rset.next()){
+				list.add(new PrintSong(rset.getInt(1), rset.getString(2), rset.getString(3),rset.getString(4)) );
+			}
+		}finally{
+			DBUtil.close(con, pstmt, rset);
+		}
+		return list;
+	}
+	
+	
 }

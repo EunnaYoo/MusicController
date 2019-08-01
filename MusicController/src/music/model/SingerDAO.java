@@ -11,9 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import music.exception.NotExistException;
 import music.model.dto.SingerDTO;
-import music.model.dto.SongDTO;
 import music.model.util.DBUtil;
 
 public class SingerDAO {
@@ -108,7 +106,6 @@ public class SingerDAO {
 			}
 			bufReader.close();
 		}catch (FileNotFoundException e) {
-	      // TODO: handle exception
 		}catch(IOException e){
 			System.out.println(e);
 		}

@@ -44,6 +44,25 @@ public class SongDAO {
 		}
 		return false;
 	}
+	
+	public static boolean deleteSong(int songId) throws SQLException {
+
+	      Connection con = null;
+	      PreparedStatement pstmt = null;
+
+	      try {
+	         con = DBUtil.getConnection();
+	         pstmt = con.prepareStatement("delete from song where song_id=?");
+	         pstmt.setInt(1, songId);
+	         int result = pstmt.executeUpdate();
+	         if (result == 1) {
+	            return true;
+	         }
+	      } finally {
+	         DBUtil.close(con, pstmt);
+	      }
+	      return false;
+	}
 	//노래 검색(관리자용)
 	public ArrayList<SongDTO> getSongs(String name) throws SQLException{
 		Connection con = null;

@@ -42,7 +42,26 @@ public class SingerDAO {
 		}
 		return false;
 	}
-	
+	//제거
+	public static boolean deleteSinger(int singerId) throws SQLException {
+
+	      Connection con = null;
+	      PreparedStatement pstmt = null;
+
+	      try {
+	         con = DBUtil.getConnection();
+	         pstmt = con.prepareStatement("delete from singer where singer_id=?");
+	         pstmt.setInt(1, singerId);
+	         int result = pstmt.executeUpdate();
+	         if (result == 1) {
+	            return true;
+	         }
+	      } finally {
+	         DBUtil.close(con, pstmt);
+	      }
+	      return false;
+	}
+	//셀렉트
 	public ArrayList<SingerDTO> getSingers(String name) throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -63,38 +82,13 @@ public class SingerDAO {
 		return list;
 	}
 	
-	public String getNameFromId(int id) throws SQLException, NotExistException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		
-		String result = null;
-		try{
-			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select singer_name from singer where singer_id =?");
-			pstmt.setInt(1, id);
-			rset = pstmt.executeQuery();
-			
-			System.out.println("123123");
-//			System.out.println(rset.getString(1));
-			result = rset.getString(1);
-			
-		} finally{
-			DBUtil.close(con, pstmt, rset);
-		}
-		
-		return result;
-	}
 	
 	public void addSingersFromFile(String f) throws NumberFormatException, SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try{
-			//파일 객체 생성
 			File file = new File(f);
-			//입력 스트림 생성
 			FileReader filereader = new FileReader(file);
-			//입력 버퍼 생성
 			BufferedReader bufReader = new BufferedReader(filereader);
 			String line = "";
 			
@@ -112,7 +106,6 @@ public class SingerDAO {
 				}
 			
 			}
-	  //.readLine()은 끝에 개행문자를 읽지 않는다.            
 			bufReader.close();
 		}catch (FileNotFoundException e) {
 	      // TODO: handle exception

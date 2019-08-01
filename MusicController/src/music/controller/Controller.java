@@ -1,5 +1,6 @@
 package music.controller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,6 +8,7 @@ import music.model.Service;
 import music.model.dto.PrintSong;
 import music.model.dto.SingerDTO;
 import music.model.dto.SongDTO;
+import music.model.dto.UserDTO;
 import music.view.EndView;
 
 public class Controller {
@@ -21,17 +23,17 @@ public class Controller {
 	static Scanner sc = new Scanner(System.in);
 	
 	//곡목 검색
-	public static void getSongList(String name) {
-		try {
-			ArrayList<SongDTO> songList = service.getSongList(name);
-			EndView.showSongList(songList);
-			EndView.message("곡 번호를 입력해주세요");
-			SongDTO aim = songList.get(sc.nextInt()-1);
-			EndView.watchMovie(aim.getName(), aim.getSinger());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void getSongList(String name) {
+//		try {
+//			ArrayList<SongDTO> songList = service.getSongList(name);
+//			EndView.showSongList(songList);
+//			EndView.message("곡 번호를 입력해주세요");
+//			SongDTO aim = songList.get(sc.nextInt()-1);
+//			EndView.watchMovie(aim.getName(), aim.getSinger());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public static void printSongList(String name) {
 		try {
@@ -81,7 +83,26 @@ public class Controller {
 		service.addSingersFromFile(f);
 	}
 	
-	public String getNameFromId(int id) throws Exception{
-		return service.getNameFromId(id);
+	public void addUser(UserDTO user){
+		boolean result;
+		try {
+			result = service.addUser(user);
+			if(result) {
+				EndView.successView("등록되었습니다.");
+			}else {
+				EndView.failView("등록실패");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addMyList(int songId, int userId) throws SQLException {
+		boolean result =  service.addMyList(songId, userId);;
+		if(result) {
+			EndView.successView("추가 성공");
+		}else {
+			EndView.failView("추가 실패");
+		}
 	}
 }

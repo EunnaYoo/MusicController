@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import music.model.dto.PrintSong;
 import music.model.dto.SingerDTO;
 import music.model.dto.SongDTO;
+import music.model.dto.UserDTO;
 
 public class Service {
 	private static Service instance = new Service();
@@ -16,6 +17,8 @@ public class Service {
 	
 	private SongDAO songDAO = SongDAO.getInstance();
 	private SingerDAO singerDAO = SingerDAO.getInstance();
+	private UserDAO userDAO = UserDAO.getInstance();
+	private ChartDAO chartDAO = ChartDAO.getInstance();
 	
 	public ArrayList<SongDTO> getSongList(String name) throws SQLException{
 		return songDAO.getSongs(name);
@@ -44,7 +47,15 @@ public class Service {
 	public void addSingersFromFile(String f) throws Exception{
 		singerDAO.addSingersFromFile(f);
 	}
-	public String getNameFromId(int id) throws Exception{
-		return singerDAO.getNameFromId(id);
+	
+	public boolean addUser(UserDTO user) throws SQLException {
+		return userDAO.addUser(user);
+	}
+	
+	
+	
+	//////////차트 업데이트
+	public boolean addMyList(int songId, int userId) throws SQLException {
+		return chartDAO.addMyList(songId, userId);
 	}
 }

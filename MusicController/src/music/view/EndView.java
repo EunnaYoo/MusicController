@@ -48,6 +48,9 @@ public class EndView {
 		public static void failView(String s) {
 			System.out.println(s);
 		}
+		public static void successView(String s) {
+			System.out.println(s);
+		}
 		
 		public static void message(String m) {
 			System.out.println(m);

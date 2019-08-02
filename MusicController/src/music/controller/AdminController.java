@@ -41,18 +41,15 @@ public class AdminController {
 			EndView.Message("곡 번호를 입력해주세요");
 			PrintSongDTO aim = songList.get(indexList.indexOf(sc.nextInt()));
 
-			EndView.Message("1.듣기\t2.내 목록에 추가\t3.내 목록에 추가 후 듣기");
+			EndView.Message("1.듣기\t2.삭제\t0.종료");
 			
 			int req = sc.nextInt();
 			if (req == 1) {
 				EndView.watchMovie(aim.getName(), aim.getSinger());
-			} else if (req == 2) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
-			} else if (req == 3) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
-				EndView.watchMovie(aim.getName(), aim.getSinger());
+			} else if(req==2){
+				service.deleteSong(aim.getId());
+			} else if(req==0) {
+				return ;
 			} else {
 				EndView.failView("잘못된 입력값입니다.");
 			}
@@ -143,16 +140,6 @@ public class AdminController {
 		}
 	}
 
-	public void addMyList(int songId, int userId) throws SQLException {
-		
-		boolean result = service.addMyList(songId, userId);
-		
-		if (result) {
-			EndView.successView("추가 성공");
-		} else {
-			EndView.failView("추가 실패");
-		}
-	}
 
 	public void addNewSong(String date) {
 		

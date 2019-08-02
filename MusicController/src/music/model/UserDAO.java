@@ -24,7 +24,7 @@ public class UserDAO {
 		try{
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("insert into users values(?, ?, ?)");
-			pstmt.setInt(1, user.getId());
+			pstmt.setString(1, user.getId());
 			pstmt.setString(2, user.getName());
 			pstmt.setString(3, user.getPassword());
 			

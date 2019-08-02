@@ -16,7 +16,7 @@ public class EndView {
 		String address="https://www.youtube.com/results?search_query=";
 		
 		try {
-			doc = Jsoup.connect(address+song+"+"+singer).get();
+			doc = Jsoup.connect(address+song+"+"+singer+"³ë·¡¹æ").get();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

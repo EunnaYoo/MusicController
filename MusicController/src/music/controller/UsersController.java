@@ -92,7 +92,7 @@ public class UsersController {
 		}
 	}
 
-	public void getMyList(int id) {
+	public void getMyList(String id) {
 		try {
 			ArrayList<PrintSongDTO> result = service.getMyList(id);
 			EndView.showSongList(result);

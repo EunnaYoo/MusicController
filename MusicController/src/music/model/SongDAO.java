@@ -34,7 +34,7 @@ public class SongDAO {
 		try{
 			con = DBUtil.getConnection();
 			
-			pstmt = con.prepareStatement("insert into song values(?, ?, ?, ?)");
+			pstmt = con.prepareStatement("insert into song values(?, ?, ?, ?,0)");
 			pstmt.setInt(1, song.getId());
 			pstmt.setString(2, song.getName());
 			pstmt.setInt(3, song.getSinger());

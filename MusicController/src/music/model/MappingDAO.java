@@ -42,7 +42,7 @@ public class MappingDAO {
 	}
 	
 	// 유저 즐겨찾기 리스트 확인
-	public ArrayList<PrintSongDTO> getMyList(int id) throws SQLException {
+	public ArrayList<PrintSongDTO> getMyList(String id) throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -58,7 +58,7 @@ public class MappingDAO {
 										+ "inner join singer sg "
 										+ "on s.singer_id = sg.singer_id "
 										+ "where sum.user_id = ?" );
-			pstmt.setInt(1, id);
+			pstmt.setString(1, id);
 			
 			rset = pstmt.executeQuery();
 			list = new ArrayList<PrintSongDTO>();

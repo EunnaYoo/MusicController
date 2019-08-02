@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 import music.model.dto.PrintSongDTO;
 import music.model.dto.SingerDTO;
 import music.model.dto.SongDTO;
@@ -13,6 +15,7 @@ import music.view.EndView;
 
 public class AdminController {
 	
+	private static Logger logger = Logger.getLogger(AdminController.class.toString());
 	private static AdminController instance = new AdminController();
 	private AdminController(){};
 	public static AdminController getInstance() {
@@ -101,7 +104,19 @@ public class AdminController {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void addSinger(SingerDTO singer) {
+		
+		try {
+			boolean result = service.addSinger(singer);
+			
+			if (result == false) {
+				EndView.failView("저장실패");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public void addSingersFromFile(String f) {
 		try {
 			service.addSingersFromFile(f);

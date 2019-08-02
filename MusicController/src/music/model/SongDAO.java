@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import music.exception.NotExistException;
 import music.model.dto.PrintSongDTO;
 import music.model.dto.SongDTO;
 import music.model.util.DBUtil;
@@ -122,7 +123,7 @@ public class SongDAO {
 	}
 	
 	//노래 검색  PrintSong(songId,songName,SingerName,Date)
-	public ArrayList<PrintSongDTO> printSongs(String name) throws SQLException {
+	public ArrayList<PrintSongDTO> printSongs(String name) throws SQLException, NotExistException {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -147,6 +148,9 @@ public class SongDAO {
 			
 		} finally {
 			DBUtil.close(con, pstmt, rset);
+		}
+		if(list.size()==0) {
+			throw new NotExistException("해당 곡이 존재하지 않습니다");
 		}
 		return list;
 	}

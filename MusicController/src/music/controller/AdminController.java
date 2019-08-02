@@ -201,13 +201,6 @@ public class AdminController {
 			int req = sc.nextInt();
 			if (req == 1) {
 				EndView.watchMovie(aim.getName(), aim.getSinger());
-			} else if (req == 2) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
-			} else if (req == 3) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
-				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else {
 				EndView.failView("잘못된 입력값입니다.");
 			}
@@ -231,13 +224,6 @@ public class AdminController {
 
 			int req = sc.nextInt();
 			if (req == 1) {
-				EndView.watchMovie(aim.getName(), aim.getSinger());
-			} else if (req == 2) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
-			} else if (req == 3) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else {
 				EndView.failView("잘못된 입력값입니다.");

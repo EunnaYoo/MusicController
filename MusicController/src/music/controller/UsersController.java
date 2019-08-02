@@ -22,7 +22,7 @@ public class UsersController {
 	static Scanner sc = new Scanner(System.in);
 
 	// 곡목 검색
-	public void printSongList(String name) {
+	public void printSongList(String name, String logInId) {
 		
 		try {
 			ArrayList<PrintSongDTO> songList = service.printSongList(name);
@@ -43,12 +43,10 @@ public class UsersController {
 				service.addPopularity(aim.getId());
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else if (req == 2) {
-				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
+				service.addMyList(aim.getId(), logInId);
 			} else if (req == 3) {
-				EndView.Message("ID를 입력해주세요");
 				service.addPopularity(aim.getId());
-				service.addMyList(aim.getId(), sc.nextInt());
+				service.addMyList(aim.getId(), logInId);
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else {
 				EndView.failView("잘못된 입력값입니다.");
@@ -72,8 +70,13 @@ public class UsersController {
 			ArrayList<PrintSongDTO> songList = service.getSongListBySinger(aim.getId());
 			EndView.showSongList(songList);
 
+			ArrayList<Integer> indexList = new ArrayList<>();
+			for (PrintSongDTO eachSong : songList) {
+				indexList.add(eachSong.getId());
+			}
+			
 			EndView.Message("곡 번호를 입력해주세요");
-			PrintSongDTO aim2 = songList.get(sc.nextInt() - 1);
+			PrintSongDTO aim2 = songList.get(indexList.indexOf(sc.nextInt()));
 			
 			service.addPopularity(aim2.getId());
 			EndView.watchMovie(aim2.getName(), aim2.getSinger());
@@ -82,7 +85,7 @@ public class UsersController {
 		}
 	}
 
-	public void addMyList(int songId, int userId) throws SQLException {
+	public void addMyList(int songId, String userId) throws SQLException {
 		boolean result = service.addMyList(songId, userId);
 		;
 		if (result) {
@@ -94,8 +97,27 @@ public class UsersController {
 
 	public void getMyList(String id) {
 		try {
-			ArrayList<PrintSongDTO> result = service.getMyList(id);
-			EndView.showSongList(result);
+			ArrayList<PrintSongDTO> songList = service.getMyList(id);
+			EndView.showSongList(songList);
+			ArrayList<Integer> indexList = new ArrayList<>();
+			for (PrintSongDTO eachSong : songList) {
+				indexList.add(eachSong.getId());
+			}
+			
+			
+			EndView.Message("1.듣기\t2.종료");
+			
+			int req = sc.nextInt();
+			if (req == 1) {
+				EndView.Message("곡 번호를 입력해주세요");
+				PrintSongDTO aim = songList.get(indexList.indexOf(sc.nextInt()));
+				service.addPopularity(aim.getId());
+				EndView.watchMovie(aim.getName(), aim.getSinger());
+			} else if (req == 2) {
+				return ;
+			} else {
+				EndView.failView("잘못된 입력값입니다.");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -116,10 +138,10 @@ public class UsersController {
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else if (req == 2) {
 				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
+				service.addMyList(aim.getId(), sc.next());
 			} else if (req == 3) {
 				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
+				service.addMyList(aim.getId(), sc.next());
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else {
 				EndView.failView("잘못된 입력값입니다.");
@@ -147,10 +169,10 @@ public class UsersController {
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else if (req == 2) {
 				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
+				service.addMyList(aim.getId(), sc.next());
 			} else if (req == 3) {
 				EndView.Message("ID를 입력해주세요");
-				service.addMyList(aim.getId(), sc.nextInt());
+				service.addMyList(aim.getId(), sc.next());
 				EndView.watchMovie(aim.getName(), aim.getSinger());
 			} else {
 				EndView.failView("잘못된 입력값입니다.");

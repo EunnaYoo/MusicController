@@ -97,7 +97,7 @@ public class Service {
 	}
 	
 	// Mapping
-	public boolean addMyList(int songId, int userId) throws SQLException {
+	public boolean addMyList(int songId, String userId) throws SQLException {
 		logger.info("addMyList "+songId+" "+userId);
 		return mappingDAO.addMyList(songId, userId);
 	}

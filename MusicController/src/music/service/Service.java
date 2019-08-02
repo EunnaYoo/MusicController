@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import music.controller.AdminController;
+import music.exception.NotExistException;
 import music.model.MappingDAO;
 import music.model.NewSongDAO;
 import music.model.PopularDAO;
@@ -39,7 +40,7 @@ public class Service {
 		return songDAO.getSongs(name);
 	}
 	
-	public ArrayList<PrintSongDTO> printSongList(String name) throws SQLException {
+	public ArrayList<PrintSongDTO> printSongList(String name) throws SQLException, NotExistException {
 		logger.info("printSongList " + name);
 		return songDAO.printSongs(name);
 	}
